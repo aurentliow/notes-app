@@ -1,0 +1,134 @@
+/* src/styles/style.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background-color: var(--background-color, #f5f5f5);
+  color: var(--text-color, #333);
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header {
+  background-color: var(--primary-color, #FFC0CB);
+  padding: 1rem 0;
+  box-shadow: 0 2px 5px var(--shadow-color, rgba(0, 0, 0, 0.1));
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background-color 0.3s ease;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+section {
+  margin-bottom: 2rem;
+  animation: fadeIn 0.5s ease;
+}
+
+h2 {
+  margin-bottom: 1rem;
+  color: var(--text-color, #333);
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background-color: var(--primary-color, #FFC0CB);
+  transition: background-color 0.3s ease;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Dark mode */
+body.dark-mode {
+  --background-color: #222;
+  --text-color: #eee;
+  --card-color: #333;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Animation for new notes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.note-input-section {
+  margin-bottom: 2rem;
+}
+
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 3rem;
+  background-color: var(--text-color, #333);
+  color: var(--background-color, #f5f5f5);
+}
+
+.empty-notes {
+  text-align: center;
+  color: #7f8c8d;
+  padding: 2rem;
+  background-color: var(--card-color, white);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 0, 0, 0.1));
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .notes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  main {
+    padding: 1rem;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--background-color, #f5f5f5);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color, #FFC0CB);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--primary-dark, #FFB6C1);
+}
