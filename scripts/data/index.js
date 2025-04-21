@@ -1,4 +1,4 @@
-// scripts/data/index.js
+// Import stylesheets dan komponen
 import '../../styles/style.css';
 import '../components/app-bar.js';
 import '../components/note-input.js';
@@ -37,6 +37,43 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   // Mengambil dan menampilkan data dari API
   await fetchAndRenderNotes();
+  
+  // PERBAIKAN: Debug listener delete-note
+  document.addEventListener('delete-note', async (event) => {
+    try {
+      console.log('Event delete-note terdeteksi', event.detail);
+      
+      // Pastikan id tersedia dan valid
+      if (!event.detail || !event.detail.id) {
+        console.error('ID catatan tidak valid:', event.detail);
+        showNotification('ID catatan tidak valid', 'error');
+        return;
+      }
+      
+      loadingState.show();
+      const { id } = event.detail;
+      
+      console.log('Menghapus catatan dengan ID:', id);
+      
+      // Panggil API untuk menghapus catatan
+      const result = await NotesAPI.deleteNote(id);
+      console.log('Hasil delete dari API:', result);
+      
+      if (result.error) {
+        showNotification(result.message || 'Gagal menghapus catatan', 'error');
+        return;
+      }
+      
+      // Update tampilan setelah berhasil menghapus
+      await fetchAndRenderNotes();
+      showNotification('Catatan berhasil dihapus', 'success');
+    } catch (error) {
+      console.error('Error saat menghapus catatan:', error);
+      showNotification(`Error: ${error.message}`, 'error');
+    } finally {
+      loadingState.hide();
+    }
+  });
   
   // Event Listeners untuk Custom Events
   document.addEventListener('add-note', async (event) => {
@@ -107,30 +144,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       showNotification('Catatan berhasil dipulihkan dari arsip', 'success');
     } catch (error) {
       console.error('Error saat membatalkan arsip catatan:', error);
-      showNotification(`Error: ${error.message}`, 'error');
-    } finally {
-      loadingState.hide();
-    }
-  });
-  
-  document.addEventListener('delete-note', async (event) => {
-    try {
-      console.log('Event delete-note terdeteksi', event.detail);
-      loadingState.show();
-      const { id } = event.detail;
-      
-      const result = await NotesAPI.deleteNote(id);
-      console.log('Hasil delete dari API:', result);
-      
-      if (result.error) {
-        showNotification(result.message || 'Gagal menghapus catatan', 'error');
-        return;
-      }
-      
-      await fetchAndRenderNotes();
-      showNotification('Catatan berhasil dihapus', 'success');
-    } catch (error) {
-      console.error('Error saat menghapus catatan:', error);
       showNotification(`Error: ${error.message}`, 'error');
     } finally {
       loadingState.hide();
@@ -264,11 +277,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       
       .notification.success {
-        background-color: #2ecc71;
+        background-color: var(--primary-color);
       }
       
       .notification.error {
-        background-color: #e74c3c;
+        background-color: var(--primary-dark);
       }
       
       .notification.hide {
